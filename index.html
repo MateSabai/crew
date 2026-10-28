@@ -389,7 +389,7 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
         (b.status === 'With crew member' || b.status === 'With the Captain' ? '<p class="small" style="margin:6px 0 0">Sending a new version replaces the one waiting for approval.</p>' : '') + '</div>';
     }
     var answers = b.answers.map(function (x) { return '<div class="ans"><div class="k">' + esc(x.q) + '</div>' + esc(x.a).replace(/\n/g, '<br>') + '</div>'; }).join('');
-    paint('<header class="page-head wrap">' + logo() + '<h1>Crew profile for ' + esc(b.name) + '</h1><p>' + esc(b.post) + ' ¬∑ answers sent ' + esc(b.submitted) + ' ¬∑ ' + esc(b.ref) + '</p>' +
+    paint('<header class="page-head wrap">' + logo() + '<h1>Crew profile for ' + esc(b.name) + '</h1><p>' + esc(b.post) + ' \u00b7 answers sent ' + esc(b.submitted) + ' \u00b7 ' + esc(b.ref) + '</p>' +
       '<span class="status' + statusCls + '">' + esc(b.status) + '</span></header>' +
       '<main class="wrap">' + history +
       '<div class="card"><h2><span class="steps-n">1</span>Write it</h2><p style="margin:0 0 12px">Copy the prompt and paste it into ' + (b.writer ? 'the SABAI Profile Writer, or into ' : '') + 'Claude, ChatGPT or Copilot. It writes four versions and a brochure line, then asks what you would like changed.</p>' +
