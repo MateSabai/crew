@@ -256,6 +256,14 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
 .ans-area{min-height:140px;resize:none;overflow:hidden}
 .ans-input:focus,.ans-area:focus{border-color:var(--gold);background:#fff;box-shadow:0 0 0 4px rgba(186,148,86,.16)}
 .ans-input::placeholder,.ans-area::placeholder{color:#A8A196}
+.idea{background:none;border:0;padding:6px 0 0;margin:6px 0 0;color:var(--gold);font:600 14px/1.2 var(--sans);display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.idea:hover{color:#9C7A42}
+.ideabox{margin:10px 0 2px;background:#FBF5EA;border:1px dashed #D9C39C;border-radius:14px;padding:12px 14px 8px}
+.ideabox[hidden]{display:none}
+.ideabox .lbl{display:block;font:600 10.5px/1.2 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:0 0 6px}
+.ideabox p{margin:0 0 4px;font:italic 400 16.5px/1.45 var(--serif);color:var(--navy)}
+.ideabox .linkbtn{margin:0;padding:6px 0;font-size:13.5px}
+.ideabox.pop2 p{animation:rise .35s cubic-bezier(.2,.8,.2,1) both}
 .meter{display:flex;align-items:center;gap:10px;margin-top:10px;min-height:20px}
 .meter .m{flex:0 0 84px;height:5px;border-radius:5px;background:var(--sand);overflow:hidden}
 .meter .m i{display:block;height:100%;width:0;background:linear-gradient(90deg,#D9BE8A,var(--gold));border-radius:5px;transition:width .35s}
@@ -464,7 +472,8 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
     pen: '<path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/>',
     phone: '<rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18h2"/>',
     shield: '<path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/>',
-    shuffle: '<path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>'
+    shuffle: '<path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>',
+    bulb: '<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.8.6 1.1 1.3 1.1 2.2h5c0-.9.3-1.6 1.1-2.2A6 6 0 0 0 12 3z"/>'
   };
   function ic(name, size, width) {
     size = size || 18;
@@ -541,6 +550,8 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
     'scene-sea': 'host-sea', 'scene-views': 'host-views', 'scene-last': 'host-last' };
   var EMOJI = { 'Sunrise': '\ud83c\udf04', 'Sunset': '\ud83c\udf05', 'Tea': '\ud83e\uded6', 'Coffee': '\u2615', 'Mountains': '\u26f0\ufe0f', 'Sea': '\ud83c\udf0a',
     'Early bird': '\ud83d\udc26', 'Night owl': '\ud83e\udd89', 'Sweet': '\ud83c\udf70', 'Savoury': '\ud83e\uddc0', 'Calm anchorage': '\u2693', 'Lively crossing': '\ud83d\udca8' };
+  // made-up example answers behind 'Need an idea?' (examples.json, filled in by the builders)
+  var EXAMPLES = {"Q01": ["Sitting on my grandad's shoulders at a car boot sale in Margate, holding a toy fire engine he'd just bought me.", "The sound of my mum's hairdryer and watching snow fall past the bathroom window in Gda\u0144sk."], "Q02": ["A bin man. They got to ride on the back of the lorry.", "A marine biologist or a magician. I couldn't decide."], "Q03": ["Sun cream and chlorine at the outdoor pool in Durban.", "Toast and Vicks, at my nan's house in winter."], "Q04": ["Taking the batteries out of the TV remote to put in my torch.", "Talking in class. Every school report said the same thing."], "Q05": ["Picking strawberries in Kent. If you eat too many, you don't fill many punnets.", "A Saturday job at a garden centre. Customers always ask the one question you can't answer, so learn where everything is."], "Q06": ["A message in a bottle from a girl in Brittany. We wrote to each other for a year.", "A perfectly round green glass float from an old fishing net, in Cornwall."], "Q07": ["Lost in a corn maze in Ohio at dusk, aged eight. I could hear my dad calling but couldn't find the way out for forty minutes.", "My first night watch on my own, crossing the Bay of Biscay, when a ship's lights appeared where I didn't expect them. It was exactly where it should be."], "Q08": ["Paddling back out after a big wave knocked me off my board at Fistral. Nobody was watching, but I was shaking.", "Knocking on a stranger's door to give back a dog that had followed me home for three streets."], "Q09": ["My uncle's dinghy on Lake Windermere. The wind dropped and we paddled back with our hands.", "A pedalo in Benidorm, aged five. I wouldn't let anyone else steer."], "Q10": ["Dressed as a giant strawberry, handing out leaflets at Wimbledon.", "Counting sheep, properly, for a farmer in New Zealand. Twice a day, on a quad bike."], "Q11": ["Bleaching my own hair the night before a school photo. It went orange, and the photo is still on my mum's fridge.", "A purple and teal shell suit, worn with total confidence."], "Q12": ["Swimming. I failed my 25 metres badge twice. Now I swim most mornings.", "Cooking. My first Sunday lunch set off every smoke alarm in the flat."], "Q32": ["'Leave every place a bit tidier than you found it.' My first Bosun, in Antibes.", "'Ask the question, even if it sounds daft.' My grandmother, who asked everyone everything."], "Q43": ["Free diving to ten metres, off Gozo, last summer.", "Made sourdough. It was flat, but it tasted right."], "Q13": ["I hum the shipping forecast when I'm concentrating.", "I fold my socks into little parcels and line them up by colour."], "Q14": ["I can name every Formula 1 world champion in order.", "I can peel an orange in one long piece, every time."], "Q15": ["A tide table, a hair tie and half a Twix.", "A torch, a pen that doesn't work and a shell from this morning."], "Q16": ["A head torch and a pack of cards.", "Flip-flops, even in winter, and my own pillowcase."], "Q17": ["Pineapple on pizza, and I'll argue for it at any table.", "Sprouts. Roasted, with a bit of bacon, they're the best thing at Christmas."], "Q33": ["Prawn cocktail, my mum's lasagne, then sticky toffee pudding with custard, not cream.", "Fresh bread and olive oil, a whole grilled sea bream, and a lemon tart from the bakery in Menton."], "Q18": ["Leaving cupboard doors open. All of them.", "Saying 'two minutes' and meaning twenty."], "Q19": ["The milk goes in after the tea bag comes out.", "The best view of any boat is from the water, looking back at her."], "Q20": ["Don't Stop Me Now, with all the actions.", "Dancing Queen. I only know the chorus, but I commit."], "Q34": ["Wake up without an alarm, swim before breakfast, eggs on toast, then a long walk round a market somewhere I've never been.", "Coffee on deck at anchor, watching the light change, an hour with a book, then lunch somewhere with my feet in the sand."], "Q35": ["Paddington 2. I've watched it more times than I'll admit.", "Swallows and Amazons. I read it every summer."], "Q44": ["My nephew asking if fish get thirsty.", "A seagull taking a whole croissant out of a man's hand in Portofino."], "Q45": ["Rain on the hatch when I'm already in my bunk.", "The anchor chain running out in a quiet bay."], "Q48": ["A waterproof pouch for my phone. It has saved it three times.", "Good earplugs. The best sleep I've had in years."], "Q21": ["The passerelle. I connect people, and I go up and down a lot.", "A fender. Gets squashed, bounces back, always where it's needed."], "Q22": ["The bow at sunrise, with a cup of tea, before the deck is washed down.", "The sun deck at night, at anchor, when the stars are out."], "Q23": ["Anchored off Porquerolles in May. Clear water, nobody else there, and the smell of pine coming off the island.", "Swimming ashore at Cala Macarella in Menorca for an ice cream, then swimming back."], "Q24": ["An octopus. Curious, good at squeezing into small spaces and slightly chaotic.", "A dolphin. Happiest in a group, and I talk a lot."], "Q25": ["A pod of pilot whales alongside us at dawn off Sardinia, for twenty minutes.", "The sea lit up green at night off Corsica, every wave glowing."], "Q26": ["That we're up before them and in bed after them, and we still like it.", "How long it takes to fold a towel into a swan."], "Q27": ["Tokyo. I'd eat my way round the fish market, then sleep on the bullet train.", "Lisbon. Pastries for breakfast, the number 28 tram, sunset at a miradouro."], "Q46": ["My grandad's old watch. It doesn't work, but it goes everywhere with me.", "The notebook where I write down every place we anchor."], "Q47": ["A lifeguard in Cornwall.", "Something with animals. Probably looking after the penguins at a zoo."], "Q37": ["That I'm shy. I'm just listening first.", "People think I'm serious because I'm quiet on watch. Off watch I'm the one starting the card games."], "Q38": ["Olives. I hated them for twenty years. Now I eat them by the jar.", "Early mornings. I used to think they were a punishment. Now they're my favourite part of the day."], "Q39": ["'You make it look easy.' A guest, after I'd spent an hour getting a jet ski back on its cradle in a swell.", "My first Captain said I was the calmest person on board during a fire drill. I think about it every drill."], "Q40": ["Someone who sees the job that needs doing and does it, without making a speech about it.", "Being in a good mood at 6 am, or at least pretending to be."], "Q41": ["Put your phone down and look at the sea.", "Be kind to the person serving you."], "Q42": ["The one still swimming in the sea every morning at 85.", "The kind with a garden full of tomatoes and a story for everyone who walks past."], "Q28": ["David Attenborough, on a beach in Cornwall, with fish and chips in paper.", "My great-grandmother, who I never met, over her famous fish pie, so I can ask her everything."], "Q29": ["Mostly Sunny", "Ready in Two Minutes"], "Q30": ["I can do a convincing Scottish accent.", "I once won a village baking competition with a lemon drizzle cake."], "Q36": ["Italian, one word at a time, mostly from menus.", "The ukulele. Slowly."], "Q31": ["I have been in a cereal advert. I can hold my breath for three minutes. I was born on a ferry.", "I have climbed Kilimanjaro. I can't stand cheese. I once met a penguin called Dave."]};
   // how much has been written, and what the line under the box says
   var LEVELS = { long: [[1, 'Good start. Can you add a detail or two?'], [80, 'Good'], [200, 'Great detail'], [400, 'Brilliant']],
     short: [[1, 'A few more words?'], [25, 'Good'], [60, 'Great detail']] };
@@ -712,6 +723,10 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
         (priv ? '<div class="lock">' + ic('lock', 12, 2.4) + ' Only the Purser sees this</div>' : '');
       var qt = '<h2 class="qtext" id="qt">' + esc(q.text) + (q.required ? ' <span class="req" aria-hidden="true">*</span>' : '') + '</h2>' +
         (q.hint ? '<p class="qhint">' + esc(q.hint) + '</p>' : '');
+      var ideas = EXAMPLES[q.id] || (q.example ? [q.example] : []);
+      if (ideas.length) qt += '<button type="button" class="idea" id="idea" aria-expanded="false">' + ic('bulb', 15, 2) + 'Need an idea?</button>' +
+        '<div class="ideabox" id="ideabox" hidden><span class="lbl">Example answer, from a made-up crew member</span><p id="ideatext"></p>' +
+        (ideas.length > 1 ? '<button type="button" class="linkbtn" id="ideanext">Another example</button>' : '') + '</div>';
       var body = '';
       if (q.type === 'short' || q.type === 'email') {
         body = '<div class="field"><input class="ans-input" type="' + (q.type === 'email' ? 'email' : 'text') + '" id="ans" aria-labelledby="qt" value="' + esc(v || '') + '" maxlength="400" placeholder="' +
@@ -767,6 +782,18 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
         setTimeout(function () { if (same(st.at, at) && document.body.contains(nextBtn)) nextBtn.click(); }, REDUCED ? 200 : 560);
       }
       label(); meterUpdate(true);
+      var ib = document.getElementById('idea');
+      if (ib) {
+        var n = 0, box = document.getElementById('ideabox'), txt = document.getElementById('ideatext');
+        var showIdea = function () { txt.textContent = ideas[n % ideas.length]; box.classList.remove('pop2'); void box.offsetWidth; box.classList.add('pop2'); };
+        ib.onclick = function () {
+          var open = box.hidden;
+          box.hidden = !open; ib.setAttribute('aria-expanded', String(open));
+          if (open) showIdea();
+        };
+        var nx = document.getElementById('ideanext');
+        if (nx) nx.onclick = function () { n++; showIdea(); };
+      }
 
       var ans = document.getElementById('ans');
       if (ans) {
