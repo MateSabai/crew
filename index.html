@@ -978,10 +978,10 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
     paint('<header class="page-head wrap">' + logo() + '<h1>Crew profile for ' + esc(b.name) + '</h1><p>' + esc(b.post) + ' \u00b7 answers sent ' + esc(b.submitted) + ' \u00b7 ' + esc(b.ref) + '</p>' +
       '<span class="status' + statusCls + '">' + esc(b.status) + '</span></header>' +
       '<main class="wrap">' + history +
-      '<div class="card"><h2><span class="steps-n">1</span>Write it</h2><p style="margin:0 0 12px">Copy the prompt and paste it into the SABAI Profile Writer. It holds ' + esc(b.knownAs) + '\'s answers and the instructions. The Profile Writer writes four versions and a brochure line.</p>' +
-      '<div class="row"><button class="btn primary" id="copy" style="flex:0 1 auto">Copy the prompt</button>' +
-      (b.writer ? '<a class="btn ghost" href="' + esc(b.writer) + '" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center">Open the Profile Writer</a>' : '') + '</div>' +
-      '<details style="margin-top:12px"><summary>Show the prompt</summary><pre class="prompt" id="prompt">' + esc(b.prompt) + '</pre></details></div>' +
+      '<div class="card"><h2><span class="steps-n">1</span>Write it</h2><p style="margin:0 0 12px">' + (b.writer ? 'Press the button: it copies ' + esc(b.knownAs) + '\'s answers and opens the SABAI Profile Writer. Paste them there and press Write the profiles.' : 'Copy ' + esc(b.knownAs) + '\'s answers and paste them into the SABAI Profile Writer.') + '</p>' +
+      '<div class="row">' + (b.writer ? '<a class="btn primary" id="copyGo" href="' + esc(b.writer) + '" target="_blank" rel="noopener" style="text-decoration:none;flex:1 1 auto">Copy and open the Profile Writer</a>' : '') +
+      '<button class="btn ghost" id="copy" style="flex:0 1 auto">' + (b.writer ? 'Copy only' : 'Copy') + '</button></div>' +
+      '<details style="margin-top:12px"><summary>Show what is copied</summary><pre class="prompt" id="prompt">' + esc(b.prompt) + '</pre></details></div>' +
       '<div class="card"><h2><span class="steps-n">2</span>Send it for approval</h2><p style="margin:0 0 10px">Paste the final text below. It goes to ' + esc(b.knownAs) + ' (' + esc(b.email) + ') to approve, then to the Captain. You get an email when it is approved or if either asks for a change.</p>' +
       '<textarea class="big" id="text" placeholder="Paste the profile text here">' + esc(b.text) + '</textarea>' +
       '<label class="small" for="note" style="display:block;margin-top:12px">Note to ' + esc(b.knownAs) + ' (optional)</label><textarea class="mid" id="note">' + esc(b.note) + '</textarea>' +
@@ -989,16 +989,19 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
       '<div class="nav" style="margin:16px 0 4px"><button class="btn gold" id="send">Send to ' + esc(b.knownAs) + ' to approve</button></div></div>' +
       '<div class="card"><details><summary>' + esc(b.knownAs) + '\'s answers (' + b.answers.length + ')</summary>' + answers + '</details></div>' +
       '<p class="small centre" style="margin:20px 0 40px">Keep this link to yourself: it opens the page for this profile.</p></main>');
-    document.getElementById('copy').onclick = function () {
-      var done = function () { toast('Prompt copied'); };
-      var fallback = function () {
-        var ta = document.createElement('textarea'); ta.value = b.prompt; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select();
-        var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
-        ta.remove();
-        if (ok) done(); else { document.querySelector('details').open = true; toast('Select the prompt and copy it'); }
-      };
-      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(b.prompt).then(done, fallback); else fallback();
+    // copy straight away inside the tap, so it still works when the link opens a new tab
+    var copyNow = function () {
+      var ta = document.createElement('textarea'); ta.value = b.prompt; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select(); try { ta.setSelectionRange(0, ta.value.length); } catch (e) {}
+      var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+      ta.remove();
+      if (!ok && navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(b.prompt); ok = true; }
+      return ok;
     };
+    var cannot = function () { document.querySelector('details').open = true; toast('Select the text below and copy it'); };
+    document.getElementById('copy').onclick = function () { if (copyNow()) toast('Copied. Paste it into the Profile Writer.'); else cannot(); };
+    var cg = document.getElementById('copyGo');
+    if (cg) cg.onclick = function (e) { if (copyNow()) toast('Copied. Paste it into the Profile Writer.'); else { e.preventDefault(); cannot(); } };
     var send = document.getElementById('send');
     send.onclick = function () {
       var text = document.getElementById('text').value.trim(), note = document.getElementById('note').value.trim();
