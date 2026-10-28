@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SABAI crew profiles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#142F43; --navy-2:#1F3A52; --gold:#BA9456; --gold-soft:#EADBC0; --cream:#FBF7EF; --sand:#E9E4D9;
+  --paper:#FFFFFF; --ink:#1B2833; --muted:#5E6B75; --line:#E4DACA; --ok:#2F6B4F; --warn:#9A5B13; --bad:#A3392F;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif; --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --radius:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--cream);color:var(--ink)}
+body{font:16px/1.55 var(--sans);-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
+img{display:block;max-width:100%}
+button{font:inherit;cursor:pointer}
+a{color:var(--navy)}
+.wrap{max-width:680px;margin:0 auto;padding:0 16px}
+.logo{display:inline-block;color:var(--navy);line-height:0}
+.logo svg{height:100%;width:auto}
+
+/* hero */
+.hero{background:linear-gradient(180deg,var(--sand) 0%,var(--cream) 100%);border-bottom:1px solid var(--line);overflow:hidden}
+.hero .wrap{padding-top:28px;text-align:center}
+.hero .logo{height:30px}
+.eyebrow{font:600 12px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin:18px 0 10px}
+.hero h1{font:600 38px/1.1 var(--serif);color:var(--navy);margin:0 0 14px;letter-spacing:-.01em}
+.hero .lede{font-size:17px;color:var(--ink);max-width:520px;margin:0 auto 18px}
+.chars{display:flex;justify-content:center;align-items:flex-end;margin:8px auto 0;max-width:600px;padding:0 4px}
+.chars img{width:18.5%;height:auto;margin:0 -1%;filter:drop-shadow(0 6px 10px rgba(20,47,67,.15))}
+.chars.small{max-width:360px;margin-top:18px}
+
+.facts{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:10px}
+.facts li{display:flex;gap:12px;align-items:flex-start;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:15px}
+.facts .dot{flex:0 0 26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;font:600 13px/26px var(--sans);text-align:center}
+
+/* top bar */
+.bar{position:sticky;top:0;z-index:5;background:rgba(251,247,239,.94);backdrop-filter:saturate(1.2) blur(6px);-webkit-backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:14px;height:56px}
+.bar .logo{height:16px;flex:0 0 auto}
+.track{flex:1;height:6px;background:var(--sand);border-radius:6px;overflow:hidden}
+.track i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),#CFAE74);border-radius:6px;transition:width .35s ease}
+.count{flex:0 0 auto;font:600 13px/1 var(--sans);color:var(--navy);background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:7px 10px;white-space:nowrap}
+.count.done{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+/* section */
+.banner{margin:20px 0 0;border-radius:var(--radius);overflow:hidden;aspect-ratio:3/1;background:var(--sand);box-shadow:0 10px 30px -18px rgba(20,47,67,.6)}
+.banner img{width:100%;height:100%;object-fit:cover}
+.sec-head{margin:22px 0 8px}
+.sec-head .eyebrow{margin:0 0 8px}
+.sec-head h1{font:600 30px/1.15 var(--serif);color:var(--navy);margin:0 0 6px}
+.sec-head p{margin:0;color:var(--muted)}
+
+/* questions */
+.q{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:18px 16px 16px;margin:14px 0;transition:border-color .2s, box-shadow .2s}
+.q:focus-within{border-color:var(--gold);box-shadow:0 0 0 3px rgba(186,148,86,.15)}
+.q.answered{border-left:4px solid var(--gold);padding-left:13px}
+.q .num{font:600 11px/1 var(--sans);letter-spacing:.14em;color:var(--gold);margin-bottom:8px;text-transform:uppercase}
+.q label.qt{display:block;font:400 20px/1.3 var(--serif);color:var(--navy);margin:0 0 4px}
+.q .hint{font-size:14px;color:var(--muted);margin:0 0 10px}
+.q .req{color:var(--gold)}
+.q input[type=text],.q input[type=email],.q textarea{width:100%;border:1px solid var(--line);background:#FDFBF7;border-radius:10px;padding:12px 13px;font:16px/1.45 var(--sans);color:var(--ink);outline:none;margin-top:6px}
+.q textarea{min-height:84px;resize:vertical}
+.q input:focus,.q textarea:focus{border-color:var(--gold);background:#fff}
+.q.private{background:#F7F3EA;border-style:dashed}
+.lock{display:inline-flex;align-items:center;gap:6px;font:600 11px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--warn);margin-bottom:8px}
+
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.pill{border:1px solid var(--line);background:#FDFBF7;color:var(--navy);border-radius:999px;padding:10px 16px;font:500 15px/1 var(--sans);min-height:42px;transition:all .15s}
+.pill[aria-pressed=true]{background:var(--navy);border-color:var(--navy);color:#fff}
+.pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px;margin-top:8px}
+.pair .pill{border-radius:12px;min-height:52px;font-size:16px}
+
+.consent{display:flex;gap:12px;align-items:flex-start;cursor:pointer}
+.consent input{width:22px;height:22px;margin:3px 0 0;accent-color:var(--navy);flex:0 0 auto}
+.consent span{font-size:15px}
+
+/* nav */
+.nav{display:flex;gap:10px;justify-content:space-between;align-items:center;margin:26px 0 40px}
+.btn{border:0;border-radius:12px;padding:15px 22px;font:600 16px/1 var(--sans);min-height:52px}
+.btn.primary{background:var(--navy);color:#fff;flex:1}
+.btn.primary:hover{background:var(--navy-2)}
+.btn.ghost{background:transparent;color:var(--navy);border:1px solid var(--line)}
+.btn.gold{background:var(--gold);color:#fff;flex:1}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.stepnote{font-size:14px;color:var(--muted);text-align:center;margin:-26px 0 34px}
+.err{color:var(--bad);font-size:14px;margin-top:8px}
+
+/* review list */
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:18px 16px;margin:14px 0}
+.card h2{font:600 20px/1.25 var(--serif);color:var(--navy);margin:0 0 10px}
+.checks{list-style:none;padding:0;margin:0}
+.checks li{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:15px}
+.checks li:first-child{border-top:0}
+.checks .ok{color:var(--ok);font-weight:600}
+.checks .no{color:var(--warn);font-weight:600}
+.checks button{background:none;border:0;color:var(--navy);text-decoration:underline;padding:0;font-size:15px;text-align:left}
+.hp{position:absolute;left:-5000px;width:1px;height:1px;overflow:hidden}
+
+/* thanks + other pages */
+.centre{text-align:center}
+.page-head{padding-top:26px;padding-bottom:6px;text-align:center}
+.page-head .logo{height:22px}
+.page-head h1{font:600 30px/1.15 var(--serif);color:var(--navy);margin:14px 0 6px}
+.page-head p{color:var(--muted);margin:0}
+.status{display:inline-block;font:600 12px/1 var(--sans);letter-spacing:.06em;padding:7px 10px;border-radius:999px;background:var(--sand);color:var(--navy);margin-top:10px}
+.status.approved{background:#E1EFE6;color:var(--ok)}
+.status.change{background:#F7E9D6;color:var(--warn)}
+.profile{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:22px 20px;margin:18px 0;box-shadow:0 14px 34px -26px rgba(20,47,67,.7)}
+.profile .who{font:600 24px/1.2 var(--serif);color:var(--navy);margin:0}
+.profile .post{font:600 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:8px 0 14px}
+.profile .text{font:400 17px/1.6 var(--serif);white-space:pre-wrap;color:var(--ink)}
+.note{background:#F7F3EA;border-left:3px solid var(--gold);border-radius:8px;padding:12px 14px;margin:14px 0;font-size:15px}
+pre.prompt{white-space:pre-wrap;word-wrap:break-word;background:#F6F2EA;border:1px solid var(--line);border-radius:10px;padding:14px;font:12.5px/1.5 Menlo,Consolas,monospace;max-height:420px;overflow:auto}
+details summary{cursor:pointer;color:var(--navy);font-weight:600;padding:6px 0}
+.ans{border-top:1px solid var(--line);padding:10px 0;font-size:15px}
+.ans .k{color:var(--muted);font-size:13px;margin-bottom:2px}
+.steps-n{display:inline-block;width:26px;height:26px;border-radius:50%;background:var(--gold);color:#fff;text-align:center;font:600 13px/26px var(--sans);margin-right:8px}
+textarea.big{width:100%;min-height:220px;border:1px solid var(--line);border-radius:10px;padding:13px;font:16px/1.55 var(--serif);background:#FDFBF7;outline:none}
+textarea.big:focus{border-color:var(--gold);background:#fff}
+textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radius:10px;padding:12px;font:15px/1.5 var(--sans);background:#FDFBF7;outline:none;margin-top:6px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.small{font-size:14px;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:12px 18px;border-radius:10px;font-size:15px;box-shadow:0 10px 30px -10px rgba(0,0,0,.4);z-index:20}
+.spin{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;vertical-align:-3px;margin-right:8px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (min-width:700px){
+  .hero h1{font-size:46px}
+  .sec-head h1{font-size:34px}
+  .q{padding:22px 22px 20px}
+  .q.answered{padding-left:19px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style></head>
+<body><div id="app" aria-live="polite"></div>
+<script>var BOOT = null; var IMG = {}; var SABAI_API = "https://script.google.com/macros/s/AKfycbzuhhsRQlnmK-TdbUBuWA9FA1LlEjShZcfPVm7RoYy0Dd4AEckAJis-w_4mq0gsY_-bmw/exec";</script>
+<script>
+(function () {
+  'use strict';
+  var DEBUG = !!(window.BOOT && BOOT.debug);
+  function dbg(msg) {
+    if (!DEBUG) return;
+    var d = document.getElementById('dbg');
+    if (!d) { d = document.createElement('pre'); d.id = 'dbg'; d.style.cssText = 'position:fixed;left:0;right:0;bottom:0;max-height:45%;overflow:auto;background:#111;color:#7CFC8A;font:12px/1.4 monospace;margin:0;padding:8px;z-index:99;white-space:pre-wrap'; document.body.appendChild(d); }
+    d.textContent += msg + '\n';
+  }
+  window.addEventListener('error', function (e) { dbg('ERROR: ' + e.message + ' (line ' + e.lineno + ':' + e.colno + ')'); });
+  document.addEventListener('click', function (e) { dbg('click on ' + (e.target.id || e.target.className || e.target.tagName)); }, true);
+  dbg('page script running; mode ' + (window.BOOT && BOOT.mode));
+  var LOGO = '<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="60.0 -20.0 2975.0 690.0"><path fill="currentColor" d="M239 670C447 670 521 536 521 448C521 275 249 278 249 166C249 115 291 62 375 62C429 62 490 82 512 129H522L533 21C490 0 430 -10 375 -10C193 -10 101 89 101 201C101 382 372 370 372 488C372 540 326 597 233 597C153 597 95 567 72 524H62L60 630C103 653 159 670 239 670ZM1131 340 1031 -20C1020 -10 960 24 905 30L762 340C625 633 614 640 560 650L559 660H745L746 650C723 646 716 640 718 625C719 607 746 543 787 452H1020C1047 548 1061 601 1059 620C1057 637 1045 646 1024 650L1023 660H1258L1259 650C1216 640 1207 618 1131 340ZM819 379 837 340 932 128 990 340C994 354 997 367 1000 379ZM1756 290C1843 254 1879 194 1879 133C1879 51 1803 0 1669 0H1394L1393 10C1462 20 1459 50 1430 330C1400 610 1397 640 1326 650L1325 660H1647C1843 660 1904 530 1904 446C1904 355 1840 306 1756 290ZM1649 66C1720 66 1758 102 1758 158C1758 190 1745 244 1694 283H1686H1569L1592 66ZM1627 594H1594C1537 594 1540 567 1559 380L1562 349H1617C1717 349 1760 389 1760 454C1760 504 1743 594 1627 594ZM2497 340 2397 -20C2386 -10 2326 24 2271 30L2128 340C1991 633 1980 640 1926 650L1925 660H2111L2112 650C2089 646 2082 640 2084 625C2085 607 2112 543 2153 452H2386C2413 548 2427 601 2425 620C2423 637 2411 646 2390 650L2389 660H2624L2625 650C2582 640 2573 618 2497 340ZM2185 379 2203 340 2298 128 2356 340C2360 354 2363 367 2366 379ZM2691 660H2966L2967 650C2898 640 2901 610 2931 330C2960 50 2963 20 3034 10L3035 0H2760L2759 10C2828 20 2825 50 2796 330C2766 610 2763 640 2692 650Z"/></svg>';
+  var app = document.getElementById('app');
+  var DRAFT = 'sabai-crew-profile-draft-v1';
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function paint(html, keepScroll) { app.innerHTML = html; if (!keepScroll) window.scrollTo(0, 0); }
+  function logo() { return '<span class="logo" role="img" aria-label="SABAI">' + LOGO + '</span>'; }
+  function chars(cls) {
+    var k = ['char-captain', 'char-mate', 'char-engineer', 'char-stew', 'char-2ndstew', 'char-chef'].filter(function (x) { return IMG[x]; });
+    if (!k.length) return '';
+    return '<div class="chars ' + (cls || '') + '" aria-hidden="true">' + k.map(function (x) { return '<img src="' + IMG[x] + '" alt="">'; }).join('') + '</div>';
+  }
+  function store(v) { try { localStorage.setItem(DRAFT, JSON.stringify(v)); } catch (e) {} }
+  function loadDraft() { try { return JSON.parse(localStorage.getItem(DRAFT) || 'null'); } catch (e) { return null; } }
+  function dropDraft() { try { localStorage.removeItem(DRAFT); } catch (e) {} }
+  function toast(msg) {
+    var t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t);
+    setTimeout(function () { t.remove(); }, 2600);
+  }
+  var API = window.SABAI_API || '';
+  function api(fn, args) {
+    return fetch(API, { method: 'POST', credentials: 'omit', redirect: 'follow', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ fn: fn, args: args }) })
+      .then(function (r) { return r.json(); }, function () { throw new Error('No connection. Check your signal and try again.'); })
+      .then(function (j) { if (!j || !j.ok) throw new Error((j && j.error) || 'Something went wrong. Try again.'); return j.data; });
+  }
+  function call(fn, args, ok, fail) {
+    if (API) { api(fn, args).then(ok, fail || function (e) { alert(e && e.message || e); }); return; }
+    if (!(window.google && google.script && google.script.run)) { (fail || alert)({ message: 'Not connected. Try again in a moment.' }); return; }
+    var r = google.script.run.withSuccessHandler(ok).withFailureHandler(fail || function (e) { alert(e && e.message || e); });
+    r[fn].apply(r, args);
+  }
+  function errText(e) { return String(e && e.message || e).replace(/^Error:\s*/, '').replace(/^Exception:\s*/, ''); }
+  function grow(el) { el.style.height = 'auto'; el.style.height = Math.max(84, el.scrollHeight + 2) + 'px'; }
+
+  // ------------------------------------------------------------ crew questions
+  function Form() {
+    var S = BOOT.sections, MIN = BOOT.minimum || 10;
+    var st = loadDraft() || { answers: {}, step: -1 };
+    if (!st.answers) st.answers = {};
+    var all = []; S.forEach(function (s) { s.questions.forEach(function (q) { all.push(q); }); });
+    var byId = {}; all.forEach(function (q) { byId[q.id] = q; });
+    var countable = all.filter(function (q) { return q.counts; });
+
+    function val(id) { var v = st.answers[id]; return typeof v === 'string' ? v.trim() : v; }
+    function counted() { return countable.filter(function (q) { return val(q.id); }).length; }
+    function save() { store(st); }
+
+    function bar(i) {
+      var n = counted(), pct = Math.round(((i + 1) / (S.length + 1)) * 100);
+      return '<div class="bar"><div class="wrap">' + logo() +
+        '<div class="track" aria-hidden="true"><i style="width:' + pct + '%"></i></div>' +
+        '<span class="count' + (n >= MIN ? ' done' : '') + '" id="count">' + countText(n) + '</span></div></div>';
+    }
+    function countText(n) { return n >= MIN ? n + ' answered' : n + ' of ' + MIN; }
+    function updateCount() {
+      var el = document.getElementById('count'); if (!el) return;
+      var n = counted(); el.textContent = countText(n); el.className = 'count' + (n >= MIN ? ' done' : '');
+    }
+
+    function intro() {
+      var any = Object.keys(st.answers).some(function (k) { return val(k); });
+      paint('<section class="hero"><div class="wrap">' + logo() +
+        '<p class="eyebrow">Crew profiles</p><h1>Your crew profile</h1>' +
+        '<p class="lede">Your answers are used to write a short profile of you for the Welcome Book that guests read on board, and for the charter brochure.</p>' +
+        chars() + '</div></section>' +
+        '<main class="wrap"><ul class="facts">' +
+        '<li><span class="dot">1</span><span>Allow 30 to 45 minutes. The more detail you give, the better your profile.</span></li>' +
+        '<li><span class="dot">2</span><span>Answer as many of the ' + countable.length + ' questions as you can, in as much detail as you can. You need at least ' + MIN + '.</span></li>' +
+        '<li><span class="dot">3</span><span>Your answers are kept on this phone as you go, so you can stop and come back.</span></li>' +
+        '<li><span class="dot">4</span><span>Nothing is printed until you and the Captain have approved the text.</span></li></ul>' +
+        '<div class="nav">' + (any ? '<button class="btn ghost" id="fresh">Start again</button>' : '') +
+        '<button class="btn primary" id="go">' + (any ? 'Carry on' : 'Start') + '</button></div></main>');
+      document.getElementById('go').onclick = function () { st.step = any && st.step >= 0 ? st.step : 0; save(); step(st.step); };
+      var f = document.getElementById('fresh');
+      if (f) f.onclick = function () { if (confirm('Clear your answers on this phone and start again?')) { st = { answers: {}, step: -1 }; dropDraft(); intro(); } };
+    }
+
+    function qHtml(q, n) {
+      var v = st.answers[q.id];
+      var answered = q.type === 'consent' ? !!v : !!(typeof v === 'string' && v.trim());
+      var cls = 'q' + (q.type === 'private' ? ' private' : '') + (answered && q.counts ? ' answered' : '');
+      var req = q.required ? ' <span class="req" aria-hidden="true">*</span>' : '';
+      var head = (q.type === 'private' ? '<div class="lock"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Only the Purser sees this</div>' : (q.counts ? '<div class="num">Question ' + q.id.replace(/^Q0?/, '') + '</div>' : ''));
+      var hint = q.hint && q.type !== 'private' ? '<p class="hint" id="h-' + q.id + '">' + esc(q.hint) + '</p>' : (q.type === 'private' && q.hint ? '<p class="hint">' + esc(q.hint) + '</p>' : '');
+      var input = '';
+      if (q.type === 'short' || q.type === 'email') {
+        input = '<input type="' + (q.type === 'email' ? 'email' : 'text') + '" id="i-' + q.id + '" data-id="' + q.id + '" value="' + esc(v || '') + '"' +
+          (q.type === 'email' ? ' autocomplete="email" inputmode="email"' : (q.id === 'name' ? ' autocomplete="name"' : '')) + ' maxlength="400">';
+      } else if (q.type === 'long' || q.type === 'private') {
+        input = '<textarea id="i-' + q.id + '" data-id="' + q.id + '" maxlength="3000">' + esc(v || '') + '</textarea>';
+      } else if (q.type === 'post') {
+        var choices = q.choices.length ? q.choices : ['Other'];
+        var isOther = v && choices.indexOf(v) < 0;
+        input = '<div class="pills" role="group" aria-label="' + esc(q.text) + '">' + choices.map(function (c) {
+          var on = c === 'Other' ? (isOther || st._other) : v === c;
+          return '<button type="button" class="pill" data-post="' + esc(c) + '" aria-pressed="' + (!!on) + '">' + esc(c) + '</button>';
+        }).join('') + '</div>' +
+          '<input type="text" id="i-post-other" placeholder="Your post" value="' + esc(isOther ? v : '') + '" style="display:' + ((isOther || st._other) ? 'block' : 'none') + '" maxlength="80">';
+      } else if (q.type === 'choice') {
+        input = '<div class="pair" role="group" aria-label="' + esc(q.text) + '">' + q.choices.map(function (c) {
+          return '<button type="button" class="pill" data-pick="' + q.id + '" data-val="' + esc(c) + '" aria-pressed="' + (v === c) + '">' + esc(c) + '</button>';
+        }).join('') + '</div>';
+      } else if (q.type === 'consent') {
+        return '<div class="' + cls + '"><label class="consent"><input type="checkbox" id="i-' + q.id + '" data-id="' + q.id + '"' + (v ? ' checked' : '') + '><span>' + esc(q.text) + req + '</span></label></div>';
+      }
+      var label = q.type === 'choice' ? '<p class="qt" style="font:400 20px/1.3 var(--serif);color:var(--navy);margin:0">' + esc(q.text) + '</p>'
+        : '<label class="qt" for="i-' + q.id + '">' + esc(q.text) + req + '</label>';
+      return '<div class="' + cls + '" id="q-' + q.id + '">' + head + label + hint + input + '</div>';
+    }
+
+    function step(i) {
+      st.step = i; save();
+      if (i >= S.length) return review();
+      var s = S[i];
+      var html = bar(i) + '<main class="wrap">';
+      if (s.image && IMG[s.image]) html += '<figure class="banner"><img src="' + IMG[s.image] + '" alt=""></figure>';
+      html += '<header class="sec-head"><p class="eyebrow">Part ' + (i + 1) + ' of ' + S.length + '</p><h1>' + esc(s.title) + '</h1>' + (s.intro ? '<p>' + esc(s.intro) + '</p>' : '') + '</header>';
+      html += s.questions.map(qHtml).join('');
+      html += '<div class="err" id="stepErr" role="alert"></div>';
+      html += '<div class="nav"><button class="btn ghost" id="back">Back</button><button class="btn primary" id="next">' + (i === S.length - 1 ? 'Check and send' : 'Next') + '</button></div>';
+      html += '<p class="stepnote">Saved on this phone</p></main>';
+      paint(html);
+      bindStep(i);
+    }
+
+    function bindStep(i) {
+      Array.prototype.forEach.call(app.querySelectorAll('input[data-id],textarea[data-id]'), function (el) {
+        var id = el.getAttribute('data-id');
+        if (el.tagName === 'TEXTAREA') { grow(el); }
+        var handler = function () {
+          st.answers[id] = el.type === 'checkbox' ? el.checked : el.value;
+          if (el.tagName === 'TEXTAREA') grow(el);
+          var box = document.getElementById('q-' + id);
+          if (box && byId[id] && byId[id].counts) box.classList.toggle('answered', !!(el.value || '').trim());
+          updateCount(); save();
+        };
+        el.addEventListener('input', handler); el.addEventListener('change', handler);
+      });
+      Array.prototype.forEach.call(app.querySelectorAll('[data-post]'), function (b) {
+        b.onclick = function () {
+          var c = b.getAttribute('data-post'), other = document.getElementById('i-post-other');
+          Array.prototype.forEach.call(app.querySelectorAll('[data-post]'), function (x) { x.setAttribute('aria-pressed', 'false'); });
+          b.setAttribute('aria-pressed', 'true');
+          if (c === 'Other') { st._other = true; other.style.display = 'block'; other.focus(); st.answers.post = other.value; }
+          else { st._other = false; other.style.display = 'none'; st.answers.post = c; }
+          save();
+        };
+      });
+      var oth = document.getElementById('i-post-other');
+      if (oth) oth.addEventListener('input', function () { st.answers.post = oth.value; save(); });
+      Array.prototype.forEach.call(app.querySelectorAll('[data-pick]'), function (b) {
+        b.onclick = function () {
+          var id = b.getAttribute('data-pick'), v = b.getAttribute('data-val');
+          var now = st.answers[id] === v ? '' : v;
+          st.answers[id] = now;
+          Array.prototype.forEach.call(app.querySelectorAll('[data-pick="' + id + '"]'), function (x) { x.setAttribute('aria-pressed', String(x.getAttribute('data-val') === now)); });
+          save();
+        };
+      });
+      document.getElementById('back').onclick = function () { if (i === 0) intro(); else step(i - 1); };
+      document.getElementById('next').onclick = function () {
+        var miss = stepMissing(i);
+        if (miss.length) {
+          document.getElementById('stepErr').textContent = 'Still needed on this page: ' + miss.join(', ') + '.';
+          return;
+        }
+        step(i + 1);
+      };
+    }
+
+    function stepMissing(i) {
+      var out = [];
+      S[i].questions.forEach(function (q) {
+        if (!q.required) return;
+        var v = val(q.id);
+        if (q.type === 'consent' ? !v : !v) out.push(q.type === 'consent' ? 'your agreement' : q.text.replace(/\?$/, '').toLowerCase());
+        if (q.type === 'email' && v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) out.push('a valid email address');
+      });
+      return out;
+    }
+
+    function review() {
+      var n = counted();
+      var checks = [];
+      S.forEach(function (s, i) {
+        var miss = stepMissing(i);
+        var c = s.questions.filter(function (q) { return q.counts && val(q.id); }).length;
+        var tot = s.questions.filter(function (q) { return q.counts; }).length;
+        var right = miss.length ? '<span class="no">Needs ' + esc(miss.join(', ')) + '</span>' : (tot ? '<span class="ok">' + c + ' of ' + tot + '</span>' : '<span class="ok">Done</span>');
+        checks.push('<li><button type="button" data-goto="' + i + '">' + esc(s.title) + '</button>' + right + '</li>');
+      });
+      var lieMissing = val('Q31') && byId.LIE && !val('LIE');
+      var missAny = S.some(function (s, i) { return stepMissing(i).length; });
+      var ok = !missAny && n >= MIN && !lieMissing;
+      var html = bar(S.length) + '<main class="wrap"><header class="sec-head"><p class="eyebrow">Last step</p><h1>Check and send</h1>' +
+        '<p>You have answered ' + n + ' of the ' + countable.length + ' questions' + (n < MIN ? '. Answer ' + (MIN - n) + ' more to send.' : (n < countable.length ? '. You can send now, but every extra answer gives the Purser more to work with.' : '.')) + '</p></header>' +
+        '<div class="card"><ul class="checks">' + checks.join('') + '</ul></div>' +
+        (lieMissing ? '<div class="note">You wrote a "Two truths and a lie". Please say which one is the lie in <button type="button" class="pill" style="min-height:0;padding:4px 10px" data-goto="' + (S.length - 1) + '">The last word</button>. Only the Purser sees it.</div>' : '') +
+        '<div class="card"><h2>What happens next</h2><p style="margin:0">The Purser writes your profile from these answers and sends it to you by email. You approve it or ask for a change, then the Captain approves it.</p></div>' +
+        '<div class="hp" aria-hidden="true"><label>Website <input type="text" id="website" tabindex="-1" autocomplete="off"></label></div>' +
+        '<div class="err" id="sendErr" role="alert"></div>' +
+        '<div class="nav"><button class="btn ghost" id="back">Back</button><button class="btn gold" id="send"' + (ok ? '' : ' disabled') + '>Send my answers</button></div></main>';
+      paint(html);
+      Array.prototype.forEach.call(app.querySelectorAll('[data-goto]'), function (b) { b.onclick = function () { step(Number(b.getAttribute('data-goto'))); }; });
+      document.getElementById('back').onclick = function () { step(S.length - 1); };
+      var send = document.getElementById('send');
+      send.onclick = function () {
+        if (send.disabled) return;
+        send.disabled = true; send.innerHTML = '<span class="spin"></span>Sending';
+        var payload = { answers: {}, website: document.getElementById('website').value };
+        all.forEach(function (q) { payload.answers[q.id] = q.type === 'consent' ? !!st.answers[q.id] : (st.answers[q.id] || ''); });
+        call('submitAnswers', [payload], function (r) { dropDraft(); thanks(r); }, function (e) {
+          send.disabled = false; send.textContent = 'Send my answers';
+          document.getElementById('sendErr').textContent = errText(e) + ' Your answers are still saved on this phone.';
+        });
+      };
+    }
+
+    function thanks(r) {
+      var known = val('knownas') || String(val('name') || '').split(/\s+/)[0];
+      paint('<section class="hero"><div class="wrap">' + logo() + '<p class="eyebrow">Sent</p><h1>Thank you' + (known ? ', ' + esc(known) : '') + '</h1>' +
+        '<p class="lede">Your answers are with the Purser. You will get an email with your profile to approve before anything is printed.</p>' + chars() + '</div></section>' +
+        '<main class="wrap centre"><p class="small" style="margin:22px 0 40px">' + (r && r.ref ? 'Reference ' + esc(r.ref) + '. ' : '') + 'You can close this page.</p></main>');
+    }
+
+    if (st.step >= 0 && st.step <= S.length) { st.step >= S.length ? review() : step(st.step); } else intro();
+  }
+
+  // ------------------------------------------------------------ the Purser's page
+  function Send() {
+    var b = BOOT;
+    var statusCls = b.status === 'Approved' ? ' approved' : (/Change/.test(b.status) ? ' change' : '');
+    var history = '';
+    if (b.round > 0) {
+      history = '<div class="card"><h2>Where it is</h2><p style="margin:0 0 8px">Status: <b>' + esc(b.status) + '</b>. Version ' + b.round + ' was the last one sent.</p>' +
+        (b.crewComment ? '<div class="note"><b>' + esc(b.knownAs) + ' asked:</b><br>' + esc(b.crewComment).replace(/\n/g, '<br>') + '</div>' : '') +
+        (b.captainComment ? '<div class="note"><b>The Captain asked:</b><br>' + esc(b.captainComment).replace(/\n/g, '<br>') + '</div>' : '') +
+        (b.status === 'With crew member' || b.status === 'With the Captain' ? '<p class="small" style="margin:6px 0 0">Sending a new version replaces the one waiting for approval.</p>' : '') + '</div>';
+    }
+    var answers = b.answers.map(function (x) { return '<div class="ans"><div class="k">' + esc(x.q) + '</div>' + esc(x.a).replace(/\n/g, '<br>') + '</div>'; }).join('');
+    paint('<header class="page-head wrap">' + logo() + '<h1>Crew profile for ' + esc(b.name) + '</h1><p>' + esc(b.post) + ' ¬∑ answers sent ' + esc(b.submitted) + ' ¬∑ ' + esc(b.ref) + '</p>' +
+      '<span class="status' + statusCls + '">' + esc(b.status) + '</span></header>' +
+      '<main class="wrap">' + history +
+      '<div class="card"><h2><span class="steps-n">1</span>Write it</h2><p style="margin:0 0 12px">Copy the prompt and paste it into ' + (b.writer ? 'the SABAI Profile Writer, or into ' : '') + 'Claude, ChatGPT or Copilot. It writes four versions and a brochure line, then asks what you would like changed.</p>' +
+      '<div class="row"><button class="btn primary" id="copy" style="flex:0 1 auto">Copy the prompt</button>' +
+      (b.writer ? '<a class="btn ghost" href="' + esc(b.writer) + '" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center">Open the Profile Writer</a>' : '') + '</div>' +
+      '<details style="margin-top:12px"><summary>Show the prompt</summary><pre class="prompt" id="prompt">' + esc(b.prompt) + '</pre></details></div>' +
+      '<div class="card"><h2><span class="steps-n">2</span>Send it for approval</h2><p style="margin:0 0 10px">Paste the final text below. It goes to ' + esc(b.knownAs) + ' (' + esc(b.email) + ') to approve, then to the Captain. You get an email when it is approved or if either asks for a change.</p>' +
+      '<textarea class="big" id="text" placeholder="Paste the profile text here">' + esc(b.text) + '</textarea>' +
+      '<label class="small" for="note" style="display:block;margin-top:12px">Note to ' + esc(b.knownAs) + ' (optional)</label><textarea class="mid" id="note">' + esc(b.note) + '</textarea>' +
+      '<div class="err" id="err" role="alert"></div>' +
+      '<div class="nav" style="margin:16px 0 4px"><button class="btn gold" id="send">Send to ' + esc(b.knownAs) + ' to approve</button></div></div>' +
+      '<div class="card"><details><summary>' + esc(b.knownAs) + '\'s answers (' + b.answers.length + ')</summary>' + answers + '</details></div>' +
+      '<p class="small centre" style="margin:20px 0 40px">Keep this link to yourself: it opens the page for this profile.</p></main>');
+    document.getElementById('copy').onclick = function () {
+      var done = function () { toast('Prompt copied'); };
+      var fallback = function () {
+        var ta = document.createElement('textarea'); ta.value = b.prompt; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select();
+        var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+        ta.remove();
+        if (ok) done(); else { document.querySelector('details').open = true; toast('Select the prompt and copy it'); }
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(b.prompt).then(done, fallback); else fallback();
+    };
+    var send = document.getElementById('send');
+    send.onclick = function () {
+      var text = document.getElementById('text').value.trim(), note = document.getElementById('note').value.trim();
+      if (text.length < 20) { document.getElementById('err').textContent = 'Paste the profile text first.'; return; }
+      if (!confirm('Send this text to ' + b.knownAs + ' to approve?')) return;
+      send.disabled = true; send.innerHTML = '<span class="spin"></span>Sending';
+      call('sendForApproval', [b.ref, b.k, text, note], function () {
+        paint('<header class="page-head wrap">' + logo() + '<h1>Sent to ' + esc(b.knownAs) + '</h1><p>' + esc(b.knownAs) + ' has an email to approve the profile. Then it goes to the Captain. You will hear back by email.</p></header>' +
+          '<main class="wrap">' + chars('small') + '<div class="nav"><button class="btn ghost" id="again" style="flex:1">Back to this profile</button></div></main>');
+        document.getElementById('again').onclick = function () { location.reload(); };
+      }, function (e) { send.disabled = false; send.textContent = 'Send to ' + b.knownAs + ' to approve'; document.getElementById('err').textContent = errText(e); });
+    };
+  }
+
+  // ------------------------------------------------------------ crew and Captain approve
+  function Review() {
+    var b = BOOT, crew = b.who === 'crew';
+    if (b.state === 'replaced') {
+      return paint('<header class="page-head wrap">' + logo() + '<h1>This link is out of date</h1><p>A newer version of this profile has been sent, or it is not your turn yet. Use the button in the latest email.</p></header><main class="wrap">' + chars('small') + '</main>');
+    }
+    if (b.state === 'done') {
+      return paint('<header class="page-head wrap">' + logo() + '<h1>' + (b.decision === 'Approved' ? 'Already approved' : 'Change already asked') + '</h1><p>' +
+        (b.decision === 'Approved' ? 'You approved this profile on ' : 'You asked for a change on ') + esc(b.when) + '. Nothing more to do.</p></header><main class="wrap">' + profileCard() + '</main>');
+    }
+    paint('<header class="page-head wrap">' + logo() + '<h1>' + (crew ? 'Your crew profile' : 'Crew profile for ' + esc(b.name)) + '</h1><p>' +
+      (crew ? 'The Purser has written this from your answers. Please read it, then approve it or ask for a change.' : esc(b.knownAs) + ' has approved this text. Once you approve it, it can go in the Welcome Book and the charter brochure.') + '</p></header>' +
+      '<main class="wrap">' + (b.note ? '<div class="note"><b>Note from the Purser:</b><br>' + esc(b.note).replace(/\n/g, '<br>') + '</div>' : '') + profileCard() +
+      '<div id="changeBox" style="display:none" class="card"><label for="comment"><b>What would you like changed?</b></label><textarea class="mid" id="comment"></textarea>' +
+      '<div class="nav" style="margin:14px 0 0"><button class="btn ghost" id="cancel">Cancel</button><button class="btn primary" id="sendChange">Send to the Purser</button></div></div>' +
+      '<div class="err" id="err" role="alert"></div>' +
+      '<div class="nav" id="choices"><button class="btn ghost" id="change">Ask for a change</button><button class="btn gold" id="approve">Approve</button></div></main>');
+    var finish = function (title, body) {
+      paint('<header class="page-head wrap">' + logo() + '<h1>' + title + '</h1><p>' + body + '</p></header><main class="wrap">' + chars('small') + '<p class="small centre" style="margin:18px 0 40px">You can close this page.</p></main>');
+    };
+    var fail = function (btn, label) { return function (e) { btn.disabled = false; btn.textContent = label; document.getElementById('err').textContent = errText(e); }; };
+    var approve = document.getElementById('approve');
+    approve.onclick = function () {
+      approve.disabled = true; approve.innerHTML = '<span class="spin"></span>Approving';
+      call('recordDecision', [b.ref, b.who, b.k, 'approve', ''], function () {
+        finish('Approved, thank you', crew ? 'The profile now goes to the Captain for approval.' : 'The Purser has been told the profile is approved.');
+      }, fail(approve, 'Approve'));
+    };
+    document.getElementById('change').onclick = function () {
+      document.getElementById('changeBox').style.display = 'block'; document.getElementById('choices').style.display = 'none'; document.getElementById('comment').focus();
+    };
+    document.getElementById('cancel').onclick = function () {
+      document.getElementById('changeBox').style.display = 'none'; document.getElementById('choices').style.display = 'flex';
+    };
+    var sc = document.getElementById('sendChange');
+    sc.onclick = function () {
+      var c = document.getElementById('comment').value.trim();
+      if (!c) { document.getElementById('err').textContent = 'Say what you would like changed.'; return; }
+      sc.disabled = true; sc.innerHTML = '<span class="spin"></span>Sending';
+      call('recordDecision', [b.ref, b.who, b.k, 'change', c], function () {
+        finish('Sent to the Purser', 'The Purser will make the change and send you a new version' + (crew ? '.' : ', which goes back to ' + esc(b.knownAs) + ' first.'));
+      }, fail(sc, 'Send to the Purser'));
+    };
+    function profileCard() {
+      return '<article class="profile"><p class="who">' + esc(b.knownAs || b.name) + '</p><p class="post">' + esc(b.post) + '</p><div class="text">' + esc(b.text) + '</div></article>';
+    }
+  }
+
+  function ErrorPage() {
+    paint('<header class="page-head wrap">' + logo() + '<h1>Something is not right</h1><p>' + esc(BOOT.message || 'This page could not be opened.') + '</p></header><main class="wrap">' + chars('small') + '</main>');
+  }
+
+  function start() {
+    try {
+      if (BOOT.mode === 'form') Form();
+      else if (BOOT.mode === 'send') Send();
+      else if (BOOT.mode === 'review') Review();
+      else ErrorPage();
+    } catch (e) {
+      paint('<main class="wrap"><p class="err" style="margin:30px 0">The page could not start: ' + esc(e.message) + '</p></main>');
+    }
+  }
+  if (API && !BOOT) {
+    paint('<header class="page-head wrap" style="padding-top:60px">' + logo() + '<p style="margin-top:18px">Loading&hellip;</p></header>');
+    var q = {};
+    location.search.replace(/^\?/, '').split('&').forEach(function (kv) { if (!kv) return; var i = kv.indexOf('='); q[decodeURIComponent(i < 0 ? kv : kv.slice(0, i))] = i < 0 ? '' : decodeURIComponent(kv.slice(i + 1).replace(/\+/g, ' ')); });
+    var tryLoad = function (n) {
+      api('boot', [{ view: q.view || q.p || '', ref: q.ref || '', k: q.k || '', who: q.who || '', debug: q.debug || '' }]).then(function (d) {
+        BOOT = d.boot; IMG = d.img || {}; window.BOOT = BOOT; DEBUG = !!BOOT.debug; start();
+      }, function (e) {
+        if (n > 0) return setTimeout(function () { tryLoad(n - 1); }, 1500);
+        paint('<header class="page-head wrap" style="padding-top:60px">' + logo() + '<h1>The page could not load</h1><p>' + esc(e.message) + '</p></header>');
+      });
+    };
+    tryLoad(1);
+  } else start();
+})();
+</script>
+</body></html>
