@@ -264,6 +264,30 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
 .ideabox p{margin:0 0 4px;font:italic 400 16.5px/1.45 var(--serif);color:var(--navy)}
 .ideabox .linkbtn{margin:0;padding:6px 0;font-size:13.5px}
 .ideabox.pop2 p{animation:rise .35s cubic-bezier(.2,.8,.2,1) both}
+.voice{display:flex;align-items:center;gap:7px;margin:8px 2px 0;font-size:13px;color:var(--muted)}
+.voice svg{color:var(--gold);flex:0 0 auto}
+.seg{display:flex;background:var(--sand);border-radius:12px;padding:3px;margin:4px 0 8px}
+.seg button{flex:1;border:0;background:none;padding:9px 6px;border-radius:9px;font:600 14px/1 var(--sans);color:var(--navy)}
+.seg button.on{background:#fff;box-shadow:0 1px 3px rgba(20,47,67,.15)}
+.rpart{font:600 11px/1.2 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:16px 2px 6px}
+.qrow{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:6px 0;font:400 15.5px/1.35 var(--serif);color:var(--navy)}
+.qrow:hover{border-color:var(--gold)}
+.qrow .qt2{flex:0 0 20px;height:20px;border-radius:50%;border:1.5px solid #D6CCBA;display:flex;align-items:center;justify-content:center;margin-top:1px;color:#fff}
+.qrow.done .qt2{background:var(--ok);border-color:var(--ok)}
+.qrow.done{color:var(--muted)}
+.readall summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer;color:var(--navy)}
+.readall summary::-webkit-details-marker{display:none}
+.readall summary b{display:block;font:600 20px/1.25 var(--serif)}
+.readall summary small{display:block;font-size:13px;color:var(--muted);margin-top:3px}
+.readall summary svg{transition:transform .2s;color:var(--gold);flex:0 0 auto}
+.readall[open] summary svg{transform:rotate(90deg)}
+.rlist{margin-top:6px}
+.rrow{display:block;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:11px 2px;cursor:pointer;color:var(--ink)}
+.rrow:hover{background:#FDFBF7}
+.rrow .rq{display:block;font-size:13px;color:var(--muted);margin:0 0 3px}
+.rrow .rq em{font-style:normal;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--warn);font-weight:600;margin-left:4px}
+.rrow .ra{display:block;font:400 16px/1.5 var(--serif);color:var(--ink)}
+.rrow .re{display:block;font:600 12.5px/1 var(--sans);color:var(--gold);margin-top:6px}
 .meter{display:flex;align-items:center;gap:10px;margin-top:10px;min-height:20px}
 .meter .m{flex:0 0 84px;height:5px;border-radius:5px;background:var(--sand);overflow:hidden}
 .meter .m i{display:block;height:100%;width:0;background:linear-gradient(90deg,#D9BE8A,var(--gold));border-radius:5px;transition:width .35s}
@@ -473,6 +497,8 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
     phone: '<rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18h2"/>',
     shield: '<path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/>',
     shuffle: '<path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>',
+    mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',
+    list: '<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/>',
     bulb: '<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.8.6 1.1 1.3 1.1 2.2h5c0-.9.3-1.6 1.1-2.2A6 6 0 0 0 12 3z"/>'
   };
   function ic(name, size, width) {
@@ -568,7 +594,7 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
     S.forEach(function (s, i) { s.questions.forEach(function (q, j) { q._s = i; q._j = j; all.push(q); }); });
     var byId = {}; all.forEach(function (q) { byId[q.id] = q; });
     var countable = all.filter(function (q) { return q.counts; });
-    var dir = 'fwd', shellOn = false, hostSrc = null, busy = false;
+    var dir = 'fwd', shellOn = false, hostSrc = null, busy = false, focusNext = false;
 
     function val(id) { var v = st.answers[id]; return typeof v === 'string' ? v.trim() : v; }
     function has(q) { return q.type === 'consent' ? !!st.answers[q.id] : !!val(q.id); }
@@ -610,7 +636,7 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
         '<span class="chip" id="count"></span>' +
         '<button type="button" class="iconbtn" id="parts" aria-label="All parts">' + ic('map', 18, 2) + '</button></div></div>';
       document.getElementById('home').onclick = function () { intro(); };
-      document.getElementById('parts').onclick = partsSheet;
+      document.getElementById('parts').onclick = function () { partsSheet('parts'); };
       Array.prototype.forEach.call(document.querySelectorAll('.wp'), function (w) {
         w.onclick = function () { var i = +w.getAttribute('data-part'); st.ret = false; show({ s: i, q: -1 }, i < curPart() ? 'back' : 'fwd'); };
       });
@@ -642,9 +668,23 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
       h.innerHTML = src ? '<span class="hopw" id="hop"><span class="bobw"><img src="' + src + '" alt=""></span></span>' : '';
       h.classList.remove('in'); void h.offsetWidth; if (src) h.classList.add('in');
     }
+    function tap(btn, fn) {
+      if (!btn) return;
+      btn.onclick = fn;
+      if (FINE) return;
+      var sx = 0, sy = 0;
+      btn.addEventListener('touchstart', function (e) { var t0 = e.touches[0]; sx = t0.clientX; sy = t0.clientY; }, { passive: true });
+      btn.addEventListener('touchend', function (e) {
+        var t1 = e.changedTouches[0];
+        if (Math.abs(t1.clientX - sx) > 10 || Math.abs(t1.clientY - sy) > 10 || !e.cancelable) return;
+        e.preventDefault(); fn();
+      });
+      btn.addEventListener('mousedown', function (e) { e.preventDefault(); });
+    }
     function hop() { var e = document.getElementById('hop'); if (!e) return; e.classList.remove('go'); void e.offsetWidth; e.classList.add('go'); }
 
-    function show(at, d) {
+    // now = draw straight away, inside the tap, so a phone keeps its keyboard up for the next question
+    function show(at, d, now) {
       if (busy) return;
       dir = d || 'fwd'; st.at = at; save();
       shell();
@@ -654,14 +694,14 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
         if (at.s === 'review') review(); else if (at.q < 0) chapter(at.s); else question(at.s, at.q);
         updateBar(); window.scrollTo(0, 0);
       };
-      if (slot.firstChild && !REDUCED) { busy = true; slot.className = 'leave-' + dir; setTimeout(draw, 160); } else draw();
+      if (slot.firstChild && !REDUCED && !now) { busy = true; slot.className = 'leave-' + dir; setTimeout(draw, 160); } else draw();
     }
     function paintSlot(html) { var slot = document.getElementById('fslot'); slot.className = REDUCED ? '' : 'enter-' + dir; slot.innerHTML = html; }
     function next() {
       var L = seq(), k = posOf(st.at, L);
       milestone();
-      if (st.ret) { st.ret = false; return show({ s: 'review' }, 'fwd'); }
-      show(L[Math.min(k + 1, L.length - 1)], 'fwd');
+      if (st.ret) { st.ret = false; focusNext = false; return show({ s: 'review' }, 'fwd'); }
+      show(L[Math.min(k + 1, L.length - 1)], 'fwd', focusNext);
     }
     function back() {
       var L = seq(), k = posOf(st.at, L);
@@ -682,6 +722,7 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
 
     // ---- title page for a part
     function chapter(i) {
+      focusNext = false;
       var s = S[i], qs = s.questions.filter(shown);
       if (!qs.length) return show(i + 1 < S.length ? { s: i + 1, q: -1 } : { s: 'review' }, dir);
       var cnt = qs.filter(function (q) { return q.counts; }), done = cnt.filter(function (q) { return val(q.id); }).length;
@@ -734,7 +775,8 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
           (q.type === 'email' ? ' autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false"' : q.id === 'name' ? ' autocomplete="name"' : ' autocomplete="off"') + '></div>';
       } else if (q.type === 'long' || priv) {
         body = '<div class="field"><textarea class="ans-area" id="ans" aria-labelledby="qt" maxlength="3000" placeholder="' +
-          (priv ? 'Only the Purser reads this' : 'Take your time. Names, places and small details make the best profiles.') + '">' + esc(v || '') + '</textarea></div>';
+          (priv ? 'Only the Purser reads this' : 'Take your time. Names, places and small details make the best profiles.') + '">' + esc(v || '') + '</textarea></div>' +
+          (!FINE && q.type === 'long' ? '<p class="voice">' + ic('mic', 14, 2) + 'Tap the microphone on your keyboard to talk instead of typing.</p>' : '');
       } else if (q.type === 'post') {
         var choices = q.choices.length ? q.choices : ['Other'];
         var isOther = v && choices.indexOf(v) < 0;
@@ -786,16 +828,16 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
       if (ib) {
         var n = 0, box = document.getElementById('ideabox'), txt = document.getElementById('ideatext');
         var showIdea = function () { txt.textContent = ideas[n % ideas.length]; box.classList.remove('pop2'); void box.offsetWidth; box.classList.add('pop2'); };
-        ib.onclick = function () {
+        tap(ib, function () {
           var open = box.hidden;
           box.hidden = !open; ib.setAttribute('aria-expanded', String(open));
           if (open) showIdea();
-        };
-        var nx = document.getElementById('ideanext');
-        if (nx) nx.onclick = function () { n++; showIdea(); };
+        });
+        tap(document.getElementById('ideanext'), function () { n++; showIdea(); });
       }
 
       var ans = document.getElementById('ans');
+      if (!ans) focusNext = false;
       if (ans) {
         if (ans.tagName === 'TEXTAREA') growBig(ans);
         ans.addEventListener('input', function () {
@@ -808,7 +850,8 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
           if (ans.tagName === 'TEXTAREA' && !(e.metaKey || e.ctrlKey)) return;
           e.preventDefault(); nextBtn.click();
         });
-        if (FINE) setTimeout(function () { try { ans.focus({ preventScroll: true }); ans.setSelectionRange(ans.value.length, ans.value.length); } catch (e) {} }, REDUCED ? 0 : 380);
+        if (focusNext && !FINE) { try { ans.focus({ preventScroll: true }); ans.setSelectionRange(ans.value.length, ans.value.length); } catch (e) {} }
+        else if (FINE) setTimeout(function () { try { ans.focus({ preventScroll: true }); ans.setSelectionRange(ans.value.length, ans.value.length); } catch (e) {} }, REDUCED ? 0 : 380);
       }
       Array.prototype.forEach.call(app.querySelectorAll('[data-post]'), function (b) {
         b.onclick = function () {
@@ -840,42 +883,62 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
         var on = !st.answers[q.id]; st.answers[q.id] = on; ag.setAttribute('aria-pressed', String(on));
         need.textContent = ''; label(); save(); if (on) hop();
       };
-      document.getElementById('back').onclick = back;
-      nextBtn.onclick = function () {
+      tap(document.getElementById('back'), function () { focusNext = false; back(); });
+      tap(nextBtn, function () {
         var miss = missing(q);
         if (miss) { need.textContent = miss; card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake'); return; }
+        focusNext = !!(ans && document.activeElement === ans);
         next();
-      };
+      });
     }
 
-    // ---- list of parts, from the map button
-    function partsSheet() {
+    // ---- the sheet from the map button: the parts, or every question to pick from
+    function partsSheet(mode) {
       if (document.querySelector('.sheet')) return;
-      var rows = S.map(function (s, i) {
+      mode = mode === 'all' ? 'all' : 'parts';
+      var partsHtml = S.map(function (s, i) {
         var qs = s.questions.filter(function (q) { return q.counts; });
         var other = s.questions.filter(function (q) { return !q.counts && shown(q) && q.type !== 'private'; });
         var tot = qs.length || other.length, c = qs.length ? qs.filter(function (q) { return val(q.id); }).length : other.filter(has).length;
         var thumb = (s.image && IMG[s.image]) || IMG['face-mate'] || '';
         return '<button type="button" class="prow' + (curPart() === i ? ' here' : '') + '" data-part="' + i + '">' + (thumb ? '<img src="' + thumb + '" alt="">' : '<span class="ph"></span>') +
           '<span class="pt"><span class="t">' + esc(s.title) + '</span><span class="mini"><i style="width:' + (tot ? Math.round(c / tot * 100) : 0) + '%"></i></span></span><span class="n">' + c + '/' + tot + '</span></button>';
+      }).join('') + '<button type="button" class="prow send" data-part="review"><span class="ph">' + ic('anchor', 20, 2) + '</span><span class="pt"><span class="t">Check and send</span></span>' + ic('right') + '</button>';
+      var allHtml = '<p class="small" style="margin:2px 2px 4px">You need ' + MIN + '. Tap any question to answer it.</p>' + S.map(function (s) {
+        var rows = s.questions.filter(function (q) { return shown(q) && q.type !== 'consent'; }).map(function (q) {
+          var d = has(q);
+          return '<button type="button" class="qrow' + (d ? ' done' : '') + '" data-s="' + q._s + '" data-j="' + q._j + '"><span class="qt2">' + (d ? ic('check', 12, 3.4) : '') + '</span><span>' + esc(q.text) + '</span></button>';
+        }).join('');
+        return rows ? '<div class="rpart">' + esc(s.title) + '</div>' + rows : '';
       }).join('');
       var bg = document.createElement('div'); bg.className = 'sheet-bg';
-      var sh = document.createElement('div'); sh.className = 'sheet'; sh.setAttribute('role', 'dialog'); sh.setAttribute('aria-modal', 'true'); sh.setAttribute('aria-label', 'All parts');
-      sh.innerHTML = '<div class="grab"></div><div class="sheet-head"><h2>Your progress</h2><span class="chip' + (counted() >= MIN ? ' done' : '') + '">' + countText(counted()) + '</span></div>' + rows +
-        '<button type="button" class="prow send" data-part="review"><span class="ph">' + ic('anchor', 20, 2) + '</span><span class="pt"><span class="t">Check and send</span></span>' + ic('right') + '</button>';
+      var sh = document.createElement('div'); sh.className = 'sheet'; sh.setAttribute('role', 'dialog'); sh.setAttribute('aria-modal', 'true'); sh.setAttribute('aria-label', 'Your progress');
+      sh.innerHTML = '<div class="grab"></div><div class="sheet-head"><h2>Your progress</h2><span class="chip' + (counted() >= MIN ? ' done' : '') + '">' + countText(counted()) + '</span></div>' +
+        '<div class="seg" role="tablist"><button type="button" role="tab" data-mode="parts">Parts</button><button type="button" role="tab" data-mode="all">All questions</button></div><div id="sheetBody"></div>';
       document.body.appendChild(bg); document.body.appendChild(sh);
       var onKey = function (e) { if (e.key === 'Escape') close(); };
       var close = function () { bg.remove(); sh.remove(); document.removeEventListener('keydown', onKey); };
       document.addEventListener('keydown', onKey);
       bg.onclick = close;
-      Array.prototype.forEach.call(sh.querySelectorAll('[data-part]'), function (b) {
-        b.onclick = function () {
-          close(); st.ret = false;
-          var p = b.getAttribute('data-part');
-          if (p === 'review') show({ s: 'review' }, 'fwd'); else show({ s: +p, q: -1 }, +p < curPart() ? 'back' : 'fwd');
-        };
-      });
-      var f = sh.querySelector('.prow.here') || sh.querySelector('.prow'); if (f) f.focus({ preventScroll: true });
+      var render = function (m) {
+        mode = m;
+        Array.prototype.forEach.call(sh.querySelectorAll('[data-mode]'), function (x) { x.classList.toggle('on', x.getAttribute('data-mode') === m); x.setAttribute('aria-selected', String(x.getAttribute('data-mode') === m)); });
+        var body = sh.querySelector('#sheetBody');
+        body.innerHTML = m === 'all' ? allHtml : partsHtml;
+        Array.prototype.forEach.call(body.querySelectorAll('[data-part]'), function (b) {
+          b.onclick = function () {
+            close(); st.ret = false;
+            var p = b.getAttribute('data-part');
+            if (p === 'review') show({ s: 'review' }, 'fwd'); else show({ s: +p, q: -1 }, +p < curPart() ? 'back' : 'fwd');
+          };
+        });
+        Array.prototype.forEach.call(body.querySelectorAll('[data-s]'), function (b) {
+          b.onclick = function () { close(); st.ret = false; var si = +b.getAttribute('data-s'); show({ s: si, q: +b.getAttribute('data-j') }, si < curPart() ? 'back' : 'fwd'); };
+        });
+        var f = body.querySelector('.prow.here') || body.querySelector('button'); if (f) f.focus({ preventScroll: true });
+      };
+      Array.prototype.forEach.call(sh.querySelectorAll('[data-mode]'), function (x) { x.onclick = function () { render(x.getAttribute('data-mode')); }; });
+      render(mode);
     }
 
     // ---- check and send
@@ -899,7 +962,9 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
         '<div class="num"><b id="ringN">' + (REDUCED ? n : 0) + '</b><span>of ' + tot + ' answered</span></div></div><p class="summsg">' + esc(msg) + '</p></div>' +
         (missQ.length ? '<div class="card2 warnbox"><h2>Still needed</h2>' + missQ.map(function (q) { return '<button type="button" class="sq" data-q="' + esc(q.id) + '">' + esc(q.type === 'consent' ? 'Your agreement' : q.text) + ic('right') + '</button>'; }).join('') + '</div>' : '') +
         (lieMissing ? '<div class="card2 note2">You wrote a "Two truths and a lie". <button type="button" class="linkbtn inline" data-q="LIE">Say which one is the lie</button>. Only the Purser sees it.</div>' : '') +
-        (n < tot ? '<div class="card2"><div class="h2row"><h2>Try one of these</h2><button type="button" class="linkbtn" id="shuffle">' + ic('shuffle', 15, 2) + ' Others</button></div><div id="sugg"></div></div>' : '') +
+        (n < tot ? '<div class="card2"><div class="h2row"><h2>Try one of these</h2><button type="button" class="linkbtn" id="shuffle">' + ic('shuffle', 15, 2) + ' Others</button></div><div id="sugg"></div>' +
+          '<button type="button" class="linkbtn" id="allQs">' + ic('list', 15, 2) + ' See all the questions</button></div>' : '') +
+        readThrough() +
         '<div class="card2"><h2>Your parts</h2><div class="ptiles">' + parts + '</div></div>' +
         '<div class="card2"><h2>What happens next</h2><p class="plain">The Purser writes your profile from these answers and sends it to you by email. You approve it or ask for a change, then the Captain approves it.</p></div>' +
         '<div class="hp" aria-hidden="true"><label>Website <input type="text" id="website" tabindex="-1" autocomplete="off"></label></div>' +
@@ -928,6 +993,7 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
         bindQ(box);
       }
       suggest(); bindQ(document.getElementById('fslot'));
+      var aq = document.getElementById('allQs'); if (aq) aq.onclick = function () { partsSheet('all'); };
       var sh = document.getElementById('shuffle');
       if (sh) sh.onclick = function () { sh.classList.remove('spin2'); void sh.offsetWidth; sh.classList.add('spin2'); suggest(); };
       Array.prototype.forEach.call(app.querySelectorAll('.ptile'), function (b) {
@@ -949,6 +1015,22 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
           document.getElementById('sendErr').textContent = errText(e) + ' Your answers are still saved on this phone.';
         });
       };
+    }
+
+    // everything they have written, part by part; tap one to change it (then Next comes back here)
+    function readThrough() {
+      var parts = S.map(function (s) {
+        var rows = s.questions.filter(function (q) { return shown(q) && q.type !== 'consent' && has(q); }).map(function (q) {
+          var priv = q.type === 'private';
+          return '<button type="button" class="rrow" data-q="' + esc(q.id) + '"><span class="rq">' + esc(q.text) + (priv ? ' <em>Only the Purser sees this</em>' : '') + '</span>' +
+            '<span class="ra">' + esc(st.answers[q.id]).replace(/\n/g, '<br>') + '</span><span class="re">Change</span></button>';
+        }).join('');
+        return rows ? '<div class="rpart">' + esc(s.title) + '</div>' + rows : '';
+      }).join('');
+      if (!parts) return '';
+      var count = all.filter(function (q) { return shown(q) && q.type !== 'consent' && has(q); }).length;
+      return '<div class="card2"><details class="readall"><summary><span><b>Read through your answers</b><small>' + count + ' answers. Tap one to change it.</small></span>' + ic('right') + '</summary>' +
+        '<div class="rlist">' + parts + '</div></details></div>';
     }
 
     function thanks(r) {
@@ -978,9 +1060,10 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
         }).join('') + '</ul>' +
         '<div class="nav rise" style="animation-delay:820ms">' + (any ? '<button type="button" class="btn ghost" id="fresh">Start again</button>' : '') +
         '<button type="button" class="btn primary shine" id="go">' + (any ? 'Carry on' + (n ? ' <span class="pillc">' + n + ' answered</span>' : '') : 'Start') + ic('right') + '</button></div>' +
-        '<p class="small centre tapnote">Tap the crew to say hello.</p></main>');
+        '<p class="small centre tapnote">Tap the crew to say hello. <button type="button" class="linkbtn inline" id="seeAll">See all the questions first</button></p></main>');
       bindCrew();
       document.getElementById('go').onclick = function () { show(st.at || { s: 0, q: -1 }, 'fwd'); };
+      document.getElementById('seeAll').onclick = function () { partsSheet('all'); };
       var f = document.getElementById('fresh');
       if (f) f.onclick = function () {
         if (confirm('Clear your answers on this phone and start again?')) { st = { answers: {}, ms: [], at: null }; dropDraft(); lastCount = 0; intro(); }
