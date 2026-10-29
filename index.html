@@ -264,6 +264,7 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
 .ideabox p{margin:0 0 4px;font:italic 400 16.5px/1.45 var(--serif);color:var(--navy)}
 .ideabox .linkbtn{margin:0;padding:6px 0;font-size:13.5px}
 .ideabox.pop2 p{animation:rise .35s cubic-bezier(.2,.8,.2,1) both}
+.testbar{background:#9A5B13;color:#fff;text-align:center;font:600 12.5px/1.3 var(--sans);letter-spacing:.02em;padding:7px 12px}
 .voice{display:flex;align-items:center;gap:7px;margin:8px 2px 0;font-size:13px;color:var(--muted)}
 .voice svg{color:var(--gold);flex:0 0 auto}
 .seg{display:flex;background:var(--sand);border-radius:12px;padding:3px;margin:4px 0 8px}
@@ -449,6 +450,10 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
   var LOGO = '<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="60.0 -20.0 2975.0 690.0"><path fill="currentColor" d="M239 670C447 670 521 536 521 448C521 275 249 278 249 166C249 115 291 62 375 62C429 62 490 82 512 129H522L533 21C490 0 430 -10 375 -10C193 -10 101 89 101 201C101 382 372 370 372 488C372 540 326 597 233 597C153 597 95 567 72 524H62L60 630C103 653 159 670 239 670ZM1131 340 1031 -20C1020 -10 960 24 905 30L762 340C625 633 614 640 560 650L559 660H745L746 650C723 646 716 640 718 625C719 607 746 543 787 452H1020C1047 548 1061 601 1059 620C1057 637 1045 646 1024 650L1023 660H1258L1259 650C1216 640 1207 618 1131 340ZM819 379 837 340 932 128 990 340C994 354 997 367 1000 379ZM1756 290C1843 254 1879 194 1879 133C1879 51 1803 0 1669 0H1394L1393 10C1462 20 1459 50 1430 330C1400 610 1397 640 1326 650L1325 660H1647C1843 660 1904 530 1904 446C1904 355 1840 306 1756 290ZM1649 66C1720 66 1758 102 1758 158C1758 190 1745 244 1694 283H1686H1569L1592 66ZM1627 594H1594C1537 594 1540 567 1559 380L1562 349H1617C1717 349 1760 389 1760 454C1760 504 1743 594 1627 594ZM2497 340 2397 -20C2386 -10 2326 24 2271 30L2128 340C1991 633 1980 640 1926 650L1925 660H2111L2112 650C2089 646 2082 640 2084 625C2085 607 2112 543 2153 452H2386C2413 548 2427 601 2425 620C2423 637 2411 646 2390 650L2389 660H2624L2625 650C2582 640 2573 618 2497 340ZM2185 379 2203 340 2298 128 2356 340C2360 354 2363 367 2366 379ZM2691 660H2966L2967 650C2898 640 2901 610 2931 330C2960 50 2963 20 3034 10L3035 0H2760L2759 10C2828 20 2825 50 2796 330C2766 610 2763 640 2692 650Z"/></svg>';
   var app = document.getElementById('app');
   var DRAFT = 'sabai-crew-profile-draft-v1';
+  // ?test=1: the test version. Its own draft on the phone, and Send goes nowhere (no sheet, no email).
+  var TEST = /[?&]test=1(&|$)/.test(location.search);
+  if (TEST) DRAFT += '-test';
+  var TESTBAR = '<div class="testbar">Test version: nothing you send is saved or emailed</div>';
 
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function paint(html, keepScroll) { app.innerHTML = html; if (!keepScroll) window.scrollTo(0, 0); }
@@ -626,7 +631,7 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
     // ---- the frame: voyage bar on top, the part's host crew member, and the slot that changes
     function shell() {
       if (shellOn && document.getElementById('fslot')) return;
-      app.innerHTML = '<div id="ftop"></div><div class="stage" id="fstage"><figure class="host" id="host" aria-hidden="true"></figure><div id="fslot"></div></div>';
+      app.innerHTML = (TEST ? TESTBAR : '') + '<div id="ftop"></div><div class="stage" id="fstage"><figure class="host" id="host" aria-hidden="true"></figure><div id="fslot"></div></div>';
       shellOn = true; hostSrc = null;
       document.getElementById('ftop').innerHTML = '<div class="vbar"><div class="wrap">' +
         '<button type="button" class="logobtn" id="home" aria-label="Back to the start">' + logo() + '</button>' +
@@ -1007,6 +1012,9 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
         var ov = sendingOverlay(), t0 = Date.now();
         var payload = { answers: {}, website: document.getElementById('website').value };
         all.forEach(function (q) { payload.answers[q.id] = q.type === 'consent' ? !!st.answers[q.id] : (st.answers[q.id] || ''); });
+        if (TEST) {
+          return setTimeout(function () { dropDraft(); ov.remove(); thanks({ ref: 'TEST' }); }, REDUCED ? 0 : 1800);
+        }
         call('submitAnswers', [payload], function (r) {
           dropDraft();
           setTimeout(function () { ov.remove(); thanks(r); }, REDUCED ? 0 : Math.max(0, 1800 - (Date.now() - t0)));
@@ -1036,8 +1044,9 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
     function thanks(r) {
       shellOn = false;
       var known = val('knownas') || String(val('name') || '').split(/\s+/)[0];
-      paint('<section class="hero"><div class="wrap">' + logo() + '<p class="eyebrow rise d1">Sent</p><h1 class="rise d2">Thank you' + (known ? ', ' + esc(known) : '') + '</h1>' +
-        '<p class="lede rise d3">Your answers are with the Purser. You will get an email with your profile to approve before anything is printed.</p>' + crewRow('jump') + '</div>' +
+      paint((TEST ? TESTBAR : '') + '<section class="hero"><div class="wrap">' + logo() + '<p class="eyebrow rise d1">' + (TEST ? 'Test finished' : 'Sent') + '</p><h1 class="rise d2">Thank you' + (known ? ', ' + esc(known) : '') + '</h1>' +
+        '<p class="lede rise d3">' + (TEST ? 'This was the test version, so nothing was sent. In the real page your answers go to the Purser at this point.' :
+          'Your answers are with the Purser. You will get an email with your profile to approve before anything is printed.') + '</p>' + crewRow('jump') + '</div>' +
         waves('#FBF7EF', 'rgba(186,148,86,.24)') + '</section>' +
         '<main class="wrap centre"><p class="small" style="margin:22px 0 40px">' + (r && r.ref ? 'Reference ' + esc(r.ref) + '. ' : '') + 'You can close this page.</p></main>');
       bindCrew();
@@ -1051,7 +1060,7 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
         ['pen', 'Answer as many of the ' + countable.length + ' questions as you can, in as much detail as you can. You need at least ' + MIN + '.'],
         ['phone', 'Your answers are kept on this phone as you go, so you can stop and come back.'],
         ['shield', 'Nothing is printed until you and the Captain have approved the text.']];
-      paint('<section class="hero"><div class="wrap">' + logo() +
+      paint((TEST ? TESTBAR : '') + '<section class="hero"><div class="wrap">' + logo() +
         '<p class="eyebrow rise d1">Crew profiles</p><h1 class="rise d2">Your crew profile</h1>' +
         '<p class="lede rise d3">Your answers are used to write a short profile of you for the Welcome Book that guests read on board, and for the charter brochure.</p>' +
         crewRow() + '</div>' + waves('#FBF7EF', 'rgba(186,148,86,.24)') + '</section>' +
