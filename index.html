@@ -283,6 +283,10 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
 .readall summary svg{transition:transform .2s;color:var(--gold);flex:0 0 auto}
 .readall[open] summary svg{transform:rotate(90deg)}
 .rlist{margin-top:6px}
+.card2.sample{margin-top:18px}
+.sample-body p{font:17px/1.6 var(--serif);color:var(--ink,#1B2833);margin:14px 0 0}
+.sample-body p.sample-sig{font:600 15px/1.45 var(--sans);color:var(--navy)}
+.sample-body p.small{font:13px/1.5 var(--sans);color:var(--muted)}
 .rrow{display:block;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:11px 2px;cursor:pointer;color:var(--ink)}
 .rrow:hover{background:#FDFBF7}
 .rrow .rq{display:block;font-size:13px;color:var(--muted);margin:0 0 3px}
@@ -1067,6 +1071,11 @@ textarea.mid{width:100%;min-height:90px;border:1px solid var(--line);border-radi
         '<main class="wrap"><ul class="facts">' + facts.map(function (f, k) {
           return '<li class="rise" style="animation-delay:' + (450 + k * 90) + 'ms"><span class="dot">' + ic(f[0], 16, 2) + '</span><span>' + esc(f[1]) + '</span></li>';
         }).join('') + '</ul>' +
+        '<div class="card2 sample rise" style="animation-delay:800ms"><details class="readall"><summary><span><b>See an example profile</b>' +
+        '<small>What one made-up crew member\'s answers turned into</small></span>' + ic('right') + '</summary><div class="sample-body">' +
+        '<p>At nine, Sam was chased up a tree by a goat and stayed there for three hours, until it was safe to come down. Knots did not come easily, so Sam practised the bowline until it could be tied behind the back. Sam now has six years at sea and is the Mate on SABAI, looking after the deck and the water toys. A great crewmate, in Sam\'s words, &ldquo;sorts the problem before anyone asks&rdquo;. Toast is eaten clockwise, crusts first. Offer Sam a swim and the answer is always yes. The best so far was at night off Comino, through bioluminescence. Ask Sam about it.</p>' +
+        '<p class="sample-sig">Sam Rowe<br>Mate</p>' +
+        '<p class="small">Sam is made up for this example. Yours is written from your own answers, and you and the Captain approve it before it is used.</p></div></details></div>' +
         '<div class="nav rise" style="animation-delay:820ms">' + (any ? '<button type="button" class="btn ghost" id="fresh">Start again</button>' : '') +
         '<button type="button" class="btn primary shine" id="go">' + (any ? 'Carry on' + (n ? ' <span class="pillc">' + n + ' answered</span>' : '') : 'Start') + ic('right') + '</button></div>' +
         '<p class="small centre tapnote">Tap the crew to say hello. <button type="button" class="linkbtn inline" id="seeAll">See all the questions first</button></p></main>');
